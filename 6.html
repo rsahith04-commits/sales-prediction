@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SalesPilot - E-Commerce Sales Prediction</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Arial;background:#f1f5f9;color:#1e293b}
+header{background:#0f172a;color:white;padding:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:bold;color:#60a5fa}
+nav{display:flex;flex-wrap:wrap;gap:10px}
+nav a{color:white;text-decoration:none;padding:10px}
+nav a:hover{color:#60a5fa}
+main{max-width:1200px;margin:auto;padding:20px}
+section{padding:25px 0;scroll-margin-top:20px}
+.hero{background:linear-gradient(120deg,#0f172a,#2563eb);color:white;padding:50px 30px;border-radius:15px}
+.hero h1{font-size:40px;margin-bottom:15px}
+.hero p{line-height:1.8;margin-bottom:20px}
+.btn{background:#2563eb;color:white;border:0;padding:12px 20px;border-radius:7px;cursor:pointer;margin-top:10px}
+.btn:hover{background:#1d4ed8}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:20px 0}
+.card{background:white;padding:20px;border-radius:12px;box-shadow:0 3px 10px #00000008;margin:15px 0}
+.stat{font-size:28px;font-weight:bold;color:#2563eb;margin-top:10px}
+.service-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.service-card{background:white;padding:25px;border-radius:12px}
+.service-card h3{color:#2563eb;margin-bottom:12px}
+.service-card p{line-height:1.6;color:#64748b}
+input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #cbd5e1;border-radius:7px}
+label{display:block;margin-top:10px}
+table{width:100%;border-collapse:collapse;min-width:450px}
+th,td{padding:12px;border-bottom:1px solid #ddd;text-align:left}
+th{background:#f8fafc}
+.table{overflow-x:auto}
+footer{text-align:center;background:#0f172a;color:white;padding:25px;margin-top:30px}
+@media(max-width:600px){header{justify-content:center;text-align:center;gap:15px}.hero h1{font-size:28px}main{padding:12px}}
+#loginScreen{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#0f172a,#1d4ed8)}
+.login-box{width:100%;max-width:420px;background:#fff;padding:32px;border-radius:18px;box-shadow:0 20px 60px #0005}
+.login-logo{text-align:center;font-size:29px;font-weight:bold;color:#2563eb;margin-bottom:8px}
+.login-subtitle{text-align:center;color:#64748b;margin-bottom:24px}
+.login-box h2{text-align:center;margin-bottom:18px}
+.login-box input{margin:8px 0 14px}
+.login-box .btn{width:100%;font-size:16px}
+.login-error{color:#dc2626;min-height:20px;margin:5px 0 10px;font-size:14px}
+.demo-login{background:#eff6ff;color:#1e40af;border-radius:8px;padding:12px;margin-top:16px;font-size:13px;line-height:1.7}
+#appContent[hidden]{display:none!important}
+.logout-btn{background:#dc2626;color:#fff;border:0;border-radius:7px;padding:10px 14px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+ <div class="login-box">
+  <div class="login-logo">📈 SalesPilot</div>
+  <p class="login-subtitle">E-Commerce Sales Prediction System</p>
+  <h2>Admin Login</h2>
+  <form id="loginForm">
+   <label>Username</label>
+   <input id="loginUsername" type="text" placeholder="Enter username" required>
+   <label>Password</label>
+   <input id="loginPassword" type="password" placeholder="Enter password" required>
+   <p id="loginError" class="login-error"></p>
+   <button class="btn" type="submit">Login</button>
+  </form>
+  <div class="demo-login"><b>Demo credentials</b><br>Username: <b>admin</b><br>Password: <b>Admin@123</b></div>
+ </div>
+</div>
+
+<div id="appContent" hidden>
+<header>
+ <div class="logo">📈 SalesPilot</div>
+ <nav>
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#dashboard">Dashboard</a>
+  <a href="#products">Products</a>
+  <a href="#sales">Sales</a>
+  <a href="#prediction">Prediction</a>
+  <a href="#history">History</a>
+ </nav>
+ <button class="logout-btn" id="logoutButton">Logout</button>
+</header>
+
+<main>
+<section id="home">
+ <div class="hero">
+  <h1>Predict Your Sales.<br>Grow Your Business.</h1>
+  <p>E-Commerce Sales Prediction System</p>
+  <p>Manage products, record sales, monitor revenue, and estimate future product demand.</p>
+  <a href="#dashboard"><button class="btn">Explore Dashboard →</button></a>
+ </div>
+</section>
+
+<section id="about">
+ <div class="card">
+  <h2>About SalesPilot</h2>
+  <p>SalesPilot is an E-Commerce Sales Prediction System designed to help businesses manage products, analyze sales performance, and estimate future demand.</p>
+ </div>
+</section>
+
+<section id="services">
+ <h2>Our Services</h2>
+ <div class="service-container">
+  <div class="service-card"><h3>📊 Sales Analytics</h3><p>Analyze sales and revenue performance.</p></div>
+  <div class="service-card"><h3>🤖 Sales Prediction</h3><p>Estimate future product sales using historical data.</p></div>
+  <div class="service-card"><h3>⚡ Live Dashboard</h3><p>Monitor sales and business performance.</p></div>
+  <div class="service-card"><h3>📦 Product Management</h3><p>Add products and manage inventory.</p></div>
+ </div>
+</section>
+
+<section id="dashboard">
+ <h2>Dashboard Overview</h2>
+ <div class="cards">
+  <div class="card">Total Revenue<div class="stat" id="revenue">₹0</div></div>
+  <div class="card">Units Sold<div class="stat" id="units">0</div></div>
+  <div class="card">Total Products<div class="stat" id="productCount">0</div></div>
+  <div class="card">Transactions<div class="stat" id="transactions">0</div></div>
+ </div>
+ <div class="card">
+  <h3>Revenue Analytics</h3>
+  <canvas id="salesChart" style="display:block;width:100%;height:340px"></canvas>
+ </div>
+</section>
+
+<section id="products">
+ <h2>Product Management</h2>
+ <div class="card">
+  <form id="productForm">
+   <label>Product Name</label>
+   <input id="productName" placeholder="Enter product name" required>
+   <label>Product Price ₹</label>
+   <input id="productPrice" type="number" min="1" required>
+   <label>Product Stock</label>
+   <input id="productStock" type="number" min="0" value="20" required>
+   <button class="btn">Add Product</button>
+  </form>
+ </div>
+ <div class="card">
+  <h3>Product Inventory</h3>
+  <div class="table">
+   <table>
+    <thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Sold</th><th>Action</th></tr></thead>
+    <tbody id="productTable"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<section id="sales">
+ <h2>Sales Data Entry</h2>
+ <div class="card">
+  <form id="salesForm">
+   <label>Select Product</label>
+   <select id="saleProduct" required></select>
+   <label>Quantity Sold</label>
+   <input id="saleQuantity" type="number" min="1" required>
+   <button class="btn">Record Sale</button>
+  </form>
+  <p id="message" style="color:green;margin-top:15px"></p>
+ </div>
+</section>
+
+<section id="prediction">
+ <h2>Product Sales Prediction</h2>
+ <div class="card">
+  <form id="predictionForm">
+   <label>Select Product</label>
+   <select id="predictionProduct" required></select>
+   <label>Prediction Period</label>
+   <select id="predictionDays">
+    <option value="7">Next 7 Days</option>
+    <option value="30">Next 30 Days</option>
+   </select>
+   <button class="btn">Predict Sales</button>
+  </form>
+ </div>
+ <div class="card">
+  <h3>Prediction Result</h3>
+  <p id="predictionResult">Select a product to predict sales.</p>
+ </div>
+</section>
+
+<section id="history">
+ <h2>Sales History</h2>
+ <div class="card">
+  <input id="searchSales" placeholder="Search product sales">
+  <div class="table">
+   <table>
+    <thead><tr><th>Date</th><th>Product</th><th>Quantity</th><th>Price</th><th>Revenue</th></tr></thead>
+    <tbody id="salesTable"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <p>© 2026 SalesPilot</p>
+ <p>E-Commerce Sales Prediction System | College Project</p>
+</footer>
+
+<script>
+let products=JSON.parse(localStorage.getItem("sp_products")||"null")||[
+ {id:1,name:"Laptop",price:50000,stock:20},
+ {id:2,name:"Mobile",price:20000,stock:30},
+ {id:3,name:"Headphones",price:2500,stock:50}
+];
+
+let rawSales=JSON.parse(localStorage.getItem("sp_sales")||"[]");
+
+products=products.map((p,index)=>({
+ ...p,
+ id:p.id??index+1,
+ name:String(p.name??p.productName??`Product ${index+1}`),
+ price:Number(p.price??p.productPrice??p.sellingPrice??0)||0,
+ stock:Number(p.stock??p.quantity??p.availableStock??0)||0
+}));
+
+let sales=(Array.isArray(rawSales)?rawSales:[]).map(s=>{
+ const product=products.find(p=>
+  String(p.id)===String(s.pid??s.productId??s.product_id)||
+  String(p.name).toLowerCase()===String(s.name??s.productName??s.product??"").toLowerCase()
+ );
+ const qty=Number(s.qty??s.quantity??s.units??s.soldQuantity??0);
+ let price=Number(s.price??s.sellingPrice??s.selling_price??s.unitPrice??s.productPrice);
+ if(!Number.isFinite(price))price=0;
+ if(price===0&&Number.isFinite(Number(s.totalAmount??s.revenue??s.amount))&&qty>0){
+  price=Number(s.totalAmount??s.revenue??s.amount)/qty;
+ }
+ if(price===0&&product)price=Number(product.price)||0;
+ return {
+  ...s,
+  pid:s.pid??s.productId??s.product_id??product?.id,
+  name:String(s.name??s.productName??s.product??product?.name??"Unknown product"),
+  qty:Number.isFinite(qty)?qty:0,
+  price:Number.isFinite(price)?price:0,
+  date:s.date??s.saleDate??s.createdAt??new Date().toISOString()
+ };
+});
+
+function save(){
+ localStorage.setItem("sp_products",JSON.stringify(products));
+ localStorage.setItem("sp_sales",JSON.stringify(sales));
+}
+
+function money(n){
+ return "₹"+(Number(n)||0).toLocaleString("en-IN");
+}
+
+function safe(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+function render(){
+ let options=products.map(p=>
+  `<option value="${p.id}">${safe(p.name)} - ${money(p.price)}</option>`
+ ).join("");
+
+ document.getElementById("saleProduct").innerHTML=options||'<option value="">Add products first</option>';
+ document.getElementById("predictionProduct").innerHTML=options||'<option value="">Add products first</option>';
+
+ document.getElementById("productTable").innerHTML=products.map(p=>{
+  let sold=sales.filter(s=>String(s.pid)===String(p.id))
+   .reduce((a,s)=>a+(Number(s.qty)||0),0);
+  return `<tr>
+   <td>${safe(p.name)}</td><td>${money(p.price)}</td>
+   <td>${p.stock}</td><td>${sold}</td>
+   <td><button class="btn" onclick="deleteProduct(${p.id})">Delete</button></td>
+  </tr>`;
+ }).join("");
+
+ let revenue=0,units=0;
+ sales.forEach(s=>{
+  const q=Number(s.qty)||0;
+  const p=Number(s.price)||0;
+  revenue+=q*p;
+  units+=q;
+ });
+
+ document.getElementById("revenue").textContent=money(revenue);
+ document.getElementById("units").textContent=units;
+ document.getElementById("productCount").textContent=products.length;
+ document.getElementById("transactions").textContent=sales.length;
+
+ renderHistory();
+ renderChart();
+}
+
+function renderHistory(){
+ let q=document.getElementById("searchSales").value.toLowerCase();
+ document.getElementById("salesTable").innerHTML=
+ [...sales].reverse().filter(s=>String(s.name||"").toLowerCase().includes(q)).map(s=>`
+ <tr>
+  <td>${new Date(s.date).toLocaleString()}</td>
+  <td>${safe(s.name)}</td>
+  <td>${s.qty}</td>
+  <td>${money(s.price)}</td>
+  <td>${money(s.qty*s.price)}</td>
+ </tr>`).join("");
+}
+
+function renderChart(){
+ const canvas=document.getElementById("salesChart");
+ if(!canvas)return;
+
+ const width=Math.max(320,Math.floor(canvas.parentElement.clientWidth-40));
+ const height=340;
+ const dpr=window.devicePixelRatio||1;
+
+ canvas.style.width="100%";
+ canvas.style.height=height+"px";
+ canvas.width=Math.floor(width*dpr);
+ canvas.height=Math.floor(height*dpr);
+
+ const ctx=canvas.getContext("2d");
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.clearRect(0,0,width,height);
+
+ const values=products.map(product=>
+  sales.filter(sale=>String(sale.pid)===String(product.id))
+   .reduce((total,sale)=>total+(Number(sale.qty)||0)*(Number(sale.price)||0),0)
+ );
+
+ const maxValue=Math.max(0,...values);
+ const chartMax=maxValue>0?maxValue*1.2:100;
+ const left=82,right=width-18,top=24,bottom=height-68;
+ const plotWidth=Math.max(1,right-left);
+ const plotHeight=bottom-top;
+
+ ctx.font="12px Arial";
+ ctx.textAlign="right";
+ ctx.textBaseline="middle";
+ ctx.fillStyle="#64748b";
+
+ for(let i=0;i<=4;i++){
+  const value=chartMax*i/4;
+  const y=bottom-plotHeight*i/4;
+  ctx.beginPath();
+  ctx.strokeStyle="#e2e8f0";
+  ctx.moveTo(left,y);
+  ctx.lineTo(right,y);
+  ctx.stroke();
+  ctx.fillText("₹"+Math.round(value).toLocaleString("en-IN"),left-9,y);
+ }
+
+ if(products.length===0){
+  ctx.textAlign="center";
+  ctx.fillStyle="#64748b";
+  ctx.font="15px Arial";
+  ctx.fillText("Add products to display the graph",width/2,height/2);
+  return;
+ }
+
+ const slot=plotWidth/products.length;
+ const barWidth=Math.max(4,Math.min(58,slot*.58));
+
+ values.forEach((value,index)=>{
+  const x=left+slot*index+(slot-barWidth)/2;
+  const barHeight=value/chartMax*plotHeight;
+  const y=bottom-barHeight;
+
+  ctx.fillStyle="#2563eb";
+  ctx.fillRect(x,y,barWidth,barHeight);
+
+  ctx.textAlign="center";
+  ctx.font="11px Arial";
+  ctx.fillStyle="#1e293b";
+  ctx.fillText("₹"+Math.round(value).toLocaleString("en-IN"),
+   x+barWidth/2,Math.max(top+10,y-12));
+
+  ctx.fillStyle="#475569";
+  const name=String(products[index].name);
+  ctx.fillText(name.length>13?name.slice(0,12)+"…":name,
+   x+barWidth/2,bottom+22);
+ });
+
+ ctx.save();
+ ctx.translate(17,height/2);
+ ctx.rotate(-Math.PI/2);
+ ctx.textAlign="center";
+ ctx.fillStyle="#475569";
+ ctx.font="12px Arial";
+ ctx.fillText("Revenue (₹)",0,0);
+ ctx.restore();
+}
+
+// ADD PRODUCT
+document.getElementById("productForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ let name=document.getElementById("productName").value.trim();
+ let price=Number(document.getElementById("productPrice").value);
+ let stock=Number(document.getElementById("productStock").value);
+
+ if(!name||price<=0||stock<0||!Number.isInteger(stock)){
+  alert("Enter valid product details");return;
+ }
+
+ if(products.some(p=>p.name.toLowerCase()===name.toLowerCase())){
+  alert("Product already exists");return;
+ }
+
+ products.push({id:Date.now(),name,price,stock});
+ save();
+ render();
+ this.reset();
+ document.getElementById("productStock").value=20;
+ alert("Product added successfully!");
+});
+
+// RECORD SALE
+document.getElementById("salesForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ let id=Number(document.getElementById("saleProduct").value);
+ let qty=Number(document.getElementById("saleQuantity").value);
+ let p=products.find(x=>Number(x.id)===id);
+
+ if(!p){alert("Add products first");return;}
+ if(!Number.isInteger(qty)||qty<1){alert("Enter valid quantity");return;}
+ if(qty>p.stock){alert("Insufficient stock! Available: "+p.stock);return;}
+
+ p.stock-=qty;
+ sales.push({
+  pid:p.id,name:p.name,qty,price:p.price,
+  date:new Date().toISOString()
+ });
+
+ save();
+ render();
+ document.getElementById("saleQuantity").value="";
+ document.getElementById("message").textContent="Sale recorded successfully!";
+});
+
+// DELETE PRODUCT
+function deleteProduct(id){
+ if(sales.some(s=>String(s.pid)===String(id))){
+  alert("Product has sales history and cannot be deleted.");
+  return;
+ }
+ if(confirm("Delete product?")){
+  products=products.filter(p=>String(p.id)!==String(id));
+  save();
+  render();
+ }
+}
+
+// PREDICTION
+document.getElementById("predictionForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ let id=Number(document.getElementById("predictionProduct").value);
+ let days=Number(document.getElementById("predictionDays").value);
+ let p=products.find(x=>Number(x.id)===id);
+
+ if(!p){alert("Select a product");return;}
+
+ let recent=sales.filter(s=>
+  String(s.pid)===String(p.id)&&
+  Date.now()-new Date(s.date).getTime()<=30*86400000
+ );
+
+ let sold=recent.reduce((a,s)=>a+(Number(s.qty)||0),0);
+ let predicted=Math.round(sold/30*days);
+
+ document.getElementById("predictionResult").innerHTML=
+  "Product: "+safe(p.name)+
+  "<br>Predicted Sales: "+predicted+" Units"+
+  "<br>Predicted Revenue: "+money(predicted*p.price)+
+  "<br><small>Based on "+sold+" units sold in last 30 days.</small>";
+});
+
+// SEARCH
+document.getElementById("searchSales").addEventListener("input",renderHistory);
+
+// INITIALIZE
+render();
+
+// LOGIN
+const SALES_PILOT_USER="admin";
+const SALES_PILOT_PASS="Admin@123";
+
+function showSalesPilotApp(){
+ document.getElementById("loginScreen").style.display="none";
+ document.getElementById("appContent").hidden=false;
+ requestAnimationFrame(()=>renderChart());
+}
+
+function showSalesPilotLogin(){
+ document.getElementById("appContent").hidden=true;
+ document.getElementById("loginScreen").style.display="flex";
+ document.getElementById("loginPassword").value="";
+}
+
+document.getElementById("loginForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const username=document.getElementById("loginUsername").value.trim();
+ const password=document.getElementById("loginPassword").value;
+ const error=document.getElementById("loginError");
+
+ if(username===SALES_PILOT_USER&&password===SALES_PILOT_PASS){
+  sessionStorage.setItem("salespilot_logged_in","yes");
+  error.textContent="";
+  showSalesPilotApp();
+ }else{
+  error.textContent="Incorrect username or password.";
+ }
+});
+
+document.getElementById("logoutButton").addEventListener("click",function(){
+ sessionStorage.removeItem("salespilot_logged_in");
+ showSalesPilotLogin();
+});
+
+if(sessionStorage.getItem("salespilot_logged_in")==="yes"){
+ showSalesPilotApp();
+}else{
+ showSalesPilotLogin();
+}
+
+window.addEventListener("resize",()=>{
+ if(!document.getElementById("appContent").hidden){
+  requestAnimationFrame(renderChart);
+ }
+});
+</script>
+</div>
+</body>
+</html>
